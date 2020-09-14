@@ -1,0 +1,9 @@
+Name,DepartmentID,Age
+Bob,31,27
+Marcel,33,46
+Lisa,33,32
+Thomas,33,25
+Tim,34,39
+Josh,34,32
+Raphael,36,50
+Dan,36,120

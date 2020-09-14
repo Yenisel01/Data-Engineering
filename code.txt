@@ -1,0 +1,47 @@
+import pandas as pd pd.read_json('test.json')
+
+pd.merge(left, right, how='inner', on=None, left_on=None, right_on=None, 
+left_index=False, right_index=False, sort=True)
+
+The meaning of these arguments is as follows:
+
+left, right: The two DataFrames to be joined.
+how: The type of join operation ('inner', 'outer', 'left', or 'right').
+on, left_on, right_on: The columns or index levels to use as join keys, possibly from the left or right DataFrames.
+left_index, right_index: If True, these arguments use the index (row labels) from the left or right DataFrames as join keys.
+sort: If True, sorts the resulting DataFrame by its join keys.
+
+from airflow import DAG from airflow.operators.bash_operator import 
+BashOperator from airflow.utils.dates import days_ago default_args = {
+   'owner': 'airflow',   'depends_on_past': False,   'start_date': days_ago(2),
+   'email': ['airflow@example.com'],   'email_on_failure': False,   'email_on_retry':
+ False,   'retries': 1,   'retry_delay': timedelta(minutes=5), }
+
+The meaning of these arguments is as follows:
+
+owner: The owner of the task (often the owner's username in the operating system).
+depends_on_past: If True, this argument stops a task from occurring if it has not succeeded in the previous attempt.
+start_date: The date and time at which the task should begin executing.
+email: The contact email for the task owner.
+email_on_failure, email_on_retry: These arguments control whether the task owner receives an email notification when the task fails or is retried.
+retries: The number of times to retry a task after it fails.
+retry_delay: The time in between retries.
+Next, the user creates the DAG object that will store the various tasks in the ETL workflow:
+dag = DAG(   'tutorial',   default_args=default_args,   description='A simple tutorial DAG',   schedule_interval=timedelta(days=1), )
+
+The schedule_interval parameter controls the time between executions of the DAG workflow. Here it is set to 1 day, which effectively means that data is loaded into the target data warehouse daily.
+
+Finally, the user defines a few simple tasks and adds them to the DAG:
+
+t1 = BashOperator(   task_id='print_date',   bash_command='date',   dag=dag,
+ ) t2 = BashOperator(   task_id='sleep',   depends_on_past=False,
+   bash_command='sleep 5',   retries=3,   dag=dag, )
+
+
+
+
+
+https://www.activestate.com/blog/how-to-create-scalable-data-pipelines-with-python/
+
+streaming
+
